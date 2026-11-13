@@ -1,0 +1,502 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Um site, cinco temas</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&family=Fraunces:opsz,wght@9..144,400;9..144,800&family=Space+Grotesk:wght@400;700&family=Bungee&family=DM+Mono:wght@400;500&family=Baloo+2:wght@400;700;800&display=swap" rel="stylesheet">
+
+<style>
+
+/* TEMAS */
+
+body,
+body:has(#t-oceano:checked) {
+  --fundo: #e6f4f6;
+  --superficie: #ffffff;
+  --texto: #0b3c49;
+  --suave: #4a7783;
+  --destaque: #0a8f9c;
+  --sobre-destaque: #ffffff;
+  --borda: 1px solid #b9dde2;
+  --raio: 16px;
+  --sombra: 0 8px 24px rgba(10,143,156,.15);
+  --fonte-titulo: "Josefin Sans", sans-serif;
+  --fonte-texto: "Josefin Sans", sans-serif;
+  --peso-titulo: 700;
+}
+
+/* FLORESTA */
+
+body:has(#t-floresta:checked) {
+  --fundo: #1c2619;
+  --superficie: #273523;
+  --texto: #eef2e2;
+  --suave: #aebb9a;
+  --destaque: #c9e265;
+  --sobre-destaque: #1c2619;
+  --borda: 1px solid #3f5239;
+  --raio: 4px;
+  --sombra: none;
+  --fonte-titulo: "Fraunces", Georgia, serif;
+  --fonte-texto: Georgia, serif;
+  --peso-titulo: 800;
+}
+
+/* ESPAÇO */
+
+body:has(#t-espaco:checked) {
+  --fundo: #0d0b24;
+  --superficie: #17143a;
+  --texto: #e8e6ff;
+  --suave: #9d98d6;
+  --destaque: #ff6fb5;
+  --sobre-destaque: #0d0b24;
+  --borda: 1px solid #332d7a;
+  --raio: 24px;
+  --sombra: 0 0 28px rgba(255,111,181,.28);
+  --fonte-titulo: "Space Grotesk", sans-serif;
+  --fonte-texto: "Space Grotesk", sans-serif;
+  --peso-titulo: 700;
+}
+
+/* RETRÔ */
+
+body:has(#t-retro:checked) {
+  --fundo: #ffe14d;
+  --superficie: #ffffff;
+  --texto: #14141f;
+  --suave: #3a3a4d;
+  --destaque: #2b4bff;
+  --sobre-destaque: #ffffff;
+  --borda: 3px solid #14141f;
+  --raio: 0;
+  --sombra: 6px 6px 0 #14141f;
+  --fonte-titulo: "Bungee", sans-serif;
+  --fonte-texto: "DM Mono", monospace;
+  --peso-titulo: 400;
+}
+
+/* DOCE */
+
+body:has(#t-doce:checked) {
+  --fundo: #ffe3ef;
+  --superficie: #ffffff;
+  --texto: #5a1f3d;
+  --suave: #96557a;
+  --destaque: #e8408f;
+  --sobre-destaque: #ffffff;
+  --borda: 2px dashed #ffb3d3;
+  --raio: 28px;
+  --sombra: 0 10px 0 #ffc2dc;
+  --fonte-titulo: "Baloo 2", cursive;
+  --fonte-texto: "Baloo 2", cursive;
+  --peso-titulo: 800;
+}
+
+/* CONFIGURAÇÕES GERAIS */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--texto);
+  font-family: var(--fonte-texto);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  transition: background-color .3s, color .3s;
+}
+
+h1, h2, h3 {
+  font-family: var(--fonte-titulo);
+  font-weight: var(--peso-titulo);
+  line-height: 1.15;
+  margin: 0 0 .6em;
+}
+
+h1 {
+  font-size: clamp(2.4rem, 8vw, 4.5rem);
+}
+
+h2 {
+  font-size: clamp(1.5rem, 4vw, 2.1rem);
+}
+
+h3 {
+  font-size: 1.3rem;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+code {
+  font-family: "DM Mono", monospace;
+  font-size: .9em;
+  background: var(--fundo);
+  border: var(--borda);
+  border-width: 1px;
+  border-radius: calc(var(--raio) / 4);
+  padding: .05em .4em;
+}
+
+main,
+.topo,
+.rodape {
+  width: min(100% - 2rem, 62rem);
+  margin-inline: auto;
+}
+
+/* SELETOR DE TEMAS */
+
+.topo {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  padding: .75rem 0;
+  background: var(--fundo);
+}
+
+.seletor {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.seletor legend {
+  float: left;
+  margin-right: .75rem;
+  padding: 0;
+  font-weight: 700;
+}
+
+.seletor input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.seletor label {
+  cursor: pointer;
+  padding: .35rem 1rem;
+  background: var(--superficie);
+  color: var(--texto);
+  border: var(--borda);
+  border-radius: calc(var(--raio) * 2);
+  font-family: var(--fonte-titulo);
+  font-size: 1rem;
+  transition: background-color .2s, color .2s;
+}
+
+.seletor label:hover {
+  border-color: var(--destaque);
+}
+
+.seletor input:checked + label {
+  background: var(--destaque);
+  color: var(--sobre-destaque);
+  border-color: var(--destaque);
+}
+
+.seletor input:focus-visible + label {
+  outline: 3px solid var(--destaque);
+  outline-offset: 3px;
+}
+
+/* SEÇÕES */
+
+.hero {
+  padding: 3rem 0 2.5rem;
+}
+
+.lead {
+  max-width: 36rem;
+  font-size: 1.3rem;
+  color: var(--suave);
+}
+
+main > section {
+  margin-bottom: 3.5rem;
+}
+
+/* CARTÕES */
+
+.cartoes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1.25rem;
+}
+
+.cartoes > h2 {
+  grid-column: 1 / -1;
+  margin-bottom: 0;
+}
+
+.cartao {
+  padding: 1.5rem;
+  background: var(--superficie);
+  border: var(--borda);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+}
+
+.cartao p {
+  margin: 0;
+  color: var(--suave);
+}
+
+/* TABELA */
+
+.rolagem {
+  overflow-x: auto;
+  background: var(--superficie);
+  border: var(--borda);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+}
+
+table {
+  width: 100%;
+  min-width: 34rem;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+th, td {
+  padding: .85rem 1.1rem;
+}
+
+th {
+  background: var(--destaque);
+  color: var(--sobre-destaque);
+  font-family: var(--fonte-titulo);
+  font-weight: var(--peso-titulo);
+}
+
+tbody tr + tr td {
+  border-top: 1px solid var(--fundo);
+}
+
+/* DESAFIO */
+
+.desafio ol {
+  margin: 0;
+  padding: 1.5rem 1.5rem 1.5rem 3rem;
+  background: var(--superficie);
+  border: var(--borda);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra);
+}
+
+.desafio li + li {
+  margin-top: .6rem;
+}
+
+.desafio li::marker {
+  color: var(--destaque);
+  font-weight: 700;
+}
+
+/* RODAPÉ */
+
+.rodape {
+  padding: 1.5rem 0 3rem;
+  color: var(--suave);
+  font-size: .95rem;
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 600px) {
+  .cartoes {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ACESSIBILIDADE */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="topo">
+
+  <fieldset class="seletor">
+    <legend>Escolha um tema:</legend>
+
+    <input type="radio" name="tema" id="t-oceano" checked>
+    <label for="t-oceano">🌊 Oceano</label>
+
+    <input type="radio" name="tema" id="t-floresta">
+    <label for="t-floresta">🌳 Floresta</label>
+
+    <input type="radio" name="tema" id="t-espaco">
+    <label for="t-espaco">🚀 Espaço</label>
+
+    <input type="radio" name="tema" id="t-retro">
+    <label for="t-retro">🎮 Retrô</label>
+
+    <input type="radio" name="tema" id="t-doce">
+    <label for="t-doce">🍬 Doce</label>
+
+  </fieldset>
+
+</header>
+
+<main>
+
+  <section class="hero">
+    <h1>Um site, cinco temas</h1>
+
+    <p class="lead">
+      Esta página nunca muda de conteúdo. Clique nos temas acima
+      e veja cores, fontes, cantos e sombras mudarem só com CSS.
+    </p>
+  </section>
+
+  <section class="cartoes">
+
+    <h2>O que você vai praticar</h2>
+
+    <article class="cartao">
+      <h3>Variáveis CSS</h3>
+      <p>
+        Cada tema é um conjunto de variáveis como
+        <code>--fundo</code> e <code>--destaque</code>.
+        O resto do CSS só usa essas variáveis.
+      </p>
+    </article>
+
+    <article class="cartao">
+      <h3>Seletor :has()</h3>
+      <p>
+        Quando um botão de tema está marcado, o
+        <code>body</code> troca as variáveis.
+        Nenhuma linha de JavaScript.
+      </p>
+    </article>
+
+    <article class="cartao">
+      <h3>Tipografia</h3>
+      <p>
+        Cada tema tem um par de fontes:
+        uma para títulos e outra para o texto corrido.
+      </p>
+    </article>
+
+  </section>
+
+  <section class="tabela-area">
+
+    <h2>O que muda em cada tema</h2>
+
+    <div class="rolagem">
+
+      <table>
+        <thead>
+          <tr>
+            <th>Tema</th>
+            <th>Fonte dos títulos</th>
+            <th>Cantos</th>
+            <th>Sensação</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>Oceano</td>
+            <td>Josefin Sans</td>
+            <td>Arredondados</td>
+            <td>Calma e clara</td>
+          </tr>
+
+          <tr>
+            <td>Floresta</td>
+            <td>Fraunces</td>
+            <td>Quase retos</td>
+            <td>Escura e acolhedora</td>
+          </tr>
+
+          <tr>
+            <td>Espaço</td>
+            <td>Space Grotesk</td>
+            <td>Bem redondos</td>
+            <td>Noite com brilho</td>
+          </tr>
+
+          <tr>
+            <td>Retrô</td>
+            <td>Bungee</td>
+            <td>Retos, borda grossa</td>
+            <td>Cartaz dos anos 80</td>
+          </tr>
+
+          <tr>
+            <td>Doce</td>
+            <td>Baloo 2</td>
+            <td>Muito redondos</td>
+            <td>Leve e divertida</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+  </section>
+
+  <section class="desafio">
+
+    <h2>Desafio</h2>
+
+    <ol>
+      <li>Abra o arquivo HTML e observe o CSS.</li>
+      <li>Copie o bloco de um tema.</li>
+      <li>Crie seu próprio tema, trocando cores e fontes.</li>
+      <li>Publique no GitHub Pages e envie o link.</li>
+    </ol>
+
+  </section>
+
+</main>
+
+<footer class="rodape">
+  <p>Atividade de HTML e CSS · cinco temas diferentes</p>
+</footer>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
